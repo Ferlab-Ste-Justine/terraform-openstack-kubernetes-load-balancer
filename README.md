@@ -24,7 +24,9 @@ The module takes the following variables as input:
 - **name**: Name of the load balancer vm
 - **network_port**: Resource of type **openstack_networking_port_v2** to assign to the vm for network connectivity.
 - **server_group**: Server group to assign to the node. Should be of type **openstack_compute_servergroup_v2**.
-- **image_id**: Id of the vm image used to provision the node
+- **image_source**: Source of the image to provision the bastion on. It takes the following keys (only one of the two fields should be used, the other one should be empty):
+  - **image_id**: Id of the image to associate with a vm that has local storage
+  - **volume_id**: Id of a volume containing the os to associate with the vm
 - **flavor_id**: Id of the VM flavor
 - **keypair_name**: Name of the keypair that will be used to ssh to the node by the admin sudo user.
 - **kubernetes**: Settings for the kubernetes load balancer. Takes the following properties:

@@ -1,3 +1,13 @@
+locals {
+  block_devices = var.image_source.volume_id != "" ? [{
+    uuid                  = var.image_source.volume_id
+    source_type           = "volume"
+    boot_index            = 0
+    destination_type      = "volume"
+    delete_on_termination = false
+  }] : []
+}
+
 data "template_cloudinit_config" "user_data" {
   gzip = false
   base64_encode = false
@@ -25,7 +35,7 @@ data "template_cloudinit_config" "user_data" {
 
 resource "openstack_compute_instance_v2" "k8_load_balancer" {
   name            = var.name
-  image_id        = var.image_id
+  image_id  = var.image_source.image_id != "" ? var.image_source.image_id : null
   flavor_id       = var.flavor_id
   key_pair        = var.keypair_name
   user_data = data.template_cloudinit_config.user_data.rendered

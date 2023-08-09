@@ -13,9 +13,17 @@ variable "server_group" {
   type        = any
 }
 
-variable "image_id" {
-    description = "ID of the vm image used to provision the node"
-    type = string
+variable "image_source" {
+  description = "Source of the vm's image"
+  type = object({
+    image_id  = string
+    volume_id = string
+  })
+
+  validation {
+    condition     = (var.image_source.image_id != "" && var.image_source.volume_id == "") || (var.image_source.image_id == "" && var.image_source.volume_id != "")
+    error_message = "You must provide either an image_id or a volume_id, but not both."
+  }
 }
 
 variable "flavor_id" {
